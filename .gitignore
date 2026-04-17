@@ -1,0 +1,60 @@
+# ==========================================
+# NeoSense AI - Global Git Ignore
+# ==========================================
+
+# --- OS System Files ---
+.DS_Store
+Thumbs.db
+*.swp
+*.log
+*.tmp
+
+# --- Environment & Security (CRÍTICO) ---
+# Nunca subas tus contraseñas de MongoDB o llaves de API
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# --- Frontend & Backend (React / Node.js) ---
+node_modules/
+/dist
+/build
+/out
+.npm
+.eslintcache
+.stylelintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Database (MongoDB / Local data) ---
+# Si corres Mongo localmente o guardas dumps de la base de datos
+.mongodb
+dump/
+*.database
+*.csv
+*.xlsx
+
+# --- Firmware & Hardware (M5Stack / ESP32 / Arduino) ---
+# Archivos de compilación y temporales de Arduino/M5Stack
+.arduino/
+/firmware/build/
+/firmware/bin/
+*.hex
+*.bin
+*.elf
+*.map
+# Si usas VS Code con la extensión de Arduino
+.vscode/arduino.json
+.vscode/ipch/
+
+# --- IDEs & Editors ---
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.sublime-project
+*.sublime-workspace
