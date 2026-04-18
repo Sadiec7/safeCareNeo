@@ -1,0 +1,111 @@
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  background-color: #F4F9FD;
+}
+
+.screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: #fff;
+  padding: 1rem;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid #d6eaf8;
+}
+
+.container {
+  padding: 0 16px 30px;
+  max-width: 500px; /* Para que parezca móvil en PC */
+  margin: 0 auto;
+  width: 100%;
+}
+
+.section-header {
+  background-color: #AED6F1;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 16px 0 12px;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1A5276;
+  margin: 0;
+}
+
+.metric-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #D6EAF8;
+}
+
+.botones-row {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #AED6F1;
+  background: white;
+  color: #2980B9;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #AED6F1;
+  color: #1A5276;
+}
+
+.camara-container {
+  height: 220px;
+  background-color: #1C2833;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #7F8C8D;
+  text-align: center;
+}
+
+.reporte-card {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #D6EAF8;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.reporte-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.status-dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 8px;
+}
+.online { background-color: #2ecc71; }
+.offline { background-color: #e74c3c; }
