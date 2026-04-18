@@ -15,7 +15,7 @@ from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 app = FastAPI()
 
 # ══════════════════════════════════════════════════════════════════════════════
-GEMINI_KEY      = ""                          # ← pon tu API key de Gemini
+GEMINI_KEY      = "AQ.Ab8RN6KX0BwaDNzA5xKp6sTzL9ebnNcYU5-MuK4TEvVTB7q7Ew"
 ELEVENLABS_KEY  = ""                          # ← pon tu API key de ElevenLabs
 ELEVENLABS_VOICE_ID = "EXAVITQu4vr4xnSDxMaL" # "Bella" — voz en español
 AUDIO_FILE      = "respuesta.wav"
