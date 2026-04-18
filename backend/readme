@@ -1,0 +1,140 @@
+# safeCareNeo Backend - Sistema Robusto
+
+Backend con validación anti-falsos positivos para monitoreo de bebés.
+
+## 🛡️ Protecciones Implementadas
+
+✅ Validación de rangos físicos  
+✅ Detección de sensor bloqueado/congelado  
+✅ Detección de cambios bruscos  
+✅ Validación de patrones temporales  
+✅ Filtro de mediana móvil  
+✅ Correlación entre variables  
+✅ Monitoreo continuo de desconexiones  
+✅ Sistema de confianza (0-100%)  
+
+## 📦 Instalación
+
+```bash
+npm install
+```
+
+## ⚙️ Configuración
+
+Edita `.env`:
+
+```env
+MONGODB_URI=tu_connection_string_aqui
+PORT=8000
+MIN_CONFIDENCE_TO_SAVE=50
+SENSOR_TIMEOUT_SECONDS=60
+```
+
+## 🚀 Ejecución
+
+```bash
+# Producción
+npm start
+
+# Desarrollo (con auto-reload)
+npm run dev
+```
+
+## 📡 API Endpoints
+
+### Enviar datos del sensor
+```http
+POST /api/sensor-data
+Content-Type: application/json
+
+{
+  "sensor": "BME280",
+  "unidad_id": "ESP32_01",
+  "timestamp": 1713369600,
+  "datos": {
+    "temperatura": 25.4,
+    "presion": 1013.25,
+    "humedad": 45.2
+  },
+  "unidades": {
+    "temperatura": "°C",
+    "presion": "hPa",
+    "humedad": "%"
+  }
+}
+```
+
+### Obtener última lectura
+```http
+GET /api/sensor-data/latest/ESP32_01
+```
+
+### Obtener historial
+```http
+GET /api/sensor-data/history/ESP32_01?hours=24&limit=100
+```
+
+### Ver estadísticas
+```http
+GET /api/sensor-data/stats/ESP32_01?hours=24
+```
+
+### Salud del sensor
+```http
+GET /api/sensor-health/ESP32_01
+```
+
+### Estado de todos los sensores
+```http
+GET /api/sensors/status
+```
+
+### Alertas activas
+```http
+GET /api/alerts/active
+```
+
+## 🔧 Ajustar sensibilidad
+
+Edita `.env`:
+
+```env
+# Rangos de temperatura
+TEMP_MIN=15
+TEMP_MAX=35
+TEMP_IDEAL_MIN=18
+TEMP_IDEAL_MAX=28
+
+# Detección de cambios bruscos
+MAX_TEMP_CHANGE_PER_SECOND=1.0
+MAX_HUMIDITY_CHANGE_PER_SECOND=4.0
+
+# Sensor bloqueado
+FROZEN_SENSOR_THRESHOLD=10
+
+# Timeout de desconexión
+SENSOR_TIMEOUT_SECONDS=60
+```
+
+## 📊 Respuesta de validación
+
+```json
+{
+  "status": "success",
+  "id": "6742abc123def456789",
+  "confidence": 85,
+  "warnings": ["Humedad fuera del rango ideal: 75%"]
+}
+```
+
+Rechazado:
+```json
+{
+  "status": "rejected",
+  "confidence": 30,
+  "errors": ["CRÍTICO: Cambio brusco de temperatura: 8.5°C en 3s"],
+  "warnings": []
+}
+```
+
+## 🏗️ Arquitectura
