@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500" font-family="monospace, sans-serif">
+
+  <!-- Background -->
+  <rect width="820" height="500" fill="#0d1117"/>
+
+  <!-- Title -->
+  <text x="410" y="34" text-anchor="middle" font-size="16" font-weight="bold" fill="#e6edf3">safeCareNeo — Arquitectura del Sistema</text>
+  <text x="410" y="52" text-anchor="middle" font-size="11" fill="#8b949e">Sistema de Monitoreo Neonatal con IoT, IA Predictiva y Blockchain</text>
+
+  <!-- ── LAYER LABELS ── -->
+  <text x="20" y="90" font-size="10" fill="#30363d">HARDWARE</text>
+  <text x="20" y="210" font-size="10" fill="#30363d">BACKEND</text>
+  <text x="20" y="340" font-size="10" fill="#30363d">CLIENTE</text>
+  <text x="20" y="450" font-size="10" fill="#30363d">BLOCKCHAIN</text>
+
+  <!-- ── HARDWARE LAYER ── -->
+  <!-- ESP32 + BME280 -->
+  <rect x="60" y="66" width="155" height="100" rx="8" fill="#161b22" stroke="#ff7b72" stroke-width="1.5"/>
+  <text x="137" y="88" text-anchor="middle" font-size="11" font-weight="bold" fill="#ff7b72">ESP32 + BME280</text>
+  <text x="137" y="104" text-anchor="middle" font-size="9" fill="#ffa198">Nodo sensor transmisor</text>
+  <text x="137" y="118" text-anchor="middle" font-size="9" fill="#8b949e">Temp · Hum · Presión</text>
+  <text x="137" y="132" text-anchor="middle" font-size="9" fill="#8b949e">POST cada 5 s</text>
+  <text x="137" y="146" text-anchor="middle" font-size="9" fill="#8b949e">WiFi → HTTP/JSON</text>
+  <text x="137" y="160" text-anchor="middle" font-size="8" fill="#30363d">firmware/ESP_WS</text>
+
+  <!-- M5GO -->
+  <rect x="245" y="66" width="155" height="100" rx="8" fill="#161b22" stroke="#79c0ff" stroke-width="1.5"/>
+  <text x="322" y="88" text-anchor="middle" font-size="11" font-weight="bold" fill="#79c0ff">M5GO (ESP32)</text>
+  <text x="322" y="104" text-anchor="middle" font-size="9" fill="#a5d6ff">Receptor + visualizador</text>
+  <text x="322" y="118" text-anchor="middle" font-size="9" fill="#8b949e">Pantalla IPS 2"</text>
+  <text x="322" y="132" text-anchor="middle" font-size="9" fill="#8b949e">Speaker + botones</text>
+  <text x="322" y="146" text-anchor="middle" font-size="9" fill="#8b949e">GET datos + voz IA</text>
+  <text x="322" y="160" text-anchor="middle" font-size="8" fill="#30363d">firmware/NeoSense_M5</text>
+
+  <!-- ESP32-CAM (future) -->
+  <rect x="430" y="66" width="155" height="100" rx="8" fill="#161b22" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="507" y="88" text-anchor="middle" font-size="11" font-weight="bold" fill="#3fb950">ESP32-CAM</text>
+  <text x="507" y="104" text-anchor="middle" font-size="9" fill="#56d364">Visión computacional</text>
+  <text x="507" y="118" text-anchor="middle" font-size="9" fill="#8b949e">Detección postura YOLO</text>
+  <text x="507" y="132" text-anchor="middle" font-size="9" fill="#8b949e">Video streaming</text>
+  <text x="507" y="146" text-anchor="middle" font-size="9" fill="#8b949e">(en desarrollo)</text>
+  <text x="507" y="160" text-anchor="middle" font-size="8" fill="#30363d">firmware/ComputerVision</text>
+
+  <!-- ── BACKEND LAYER ── -->
+  <!-- Node.js Backend -->
+  <rect x="60" y="188" width="240" height="110" rx="8" fill="#161b22" stroke="#d2a8ff" stroke-width="1.5"/>
+  <text x="180" y="208" text-anchor="middle" font-size="11" font-weight="bold" fill="#d2a8ff">Backend Node.js (Express)</text>
+  <text x="180" y="224" text-anchor="middle" font-size="9" fill="#8b949e">POST /api/sensor-data</text>
+  <text x="180" y="238" text-anchor="middle" font-size="9" fill="#8b949e">GET  /api/sensor-data/latest/:id</text>
+  <text x="180" y="252" text-anchor="middle" font-size="9" fill="#8b949e">GET  /api/sensor-data/history/:id</text>
+  <text x="180" y="266" text-anchor="middle" font-size="9" fill="#8b949e">GET  /api/alerts · /api/predictions</text>
+  <text x="180" y="282" text-anchor="middle" font-size="8" fill="#30363d">backend/server.js · Puerto 8000</text>
+
+  <!-- MongoDB Atlas -->
+  <rect x="325" y="188" width="145" height="110" rx="8" fill="#161b22" stroke="#ffa657" stroke-width="1.5"/>
+  <text x="397" y="208" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffa657">MongoDB Atlas</text>
+  <text x="397" y="228" text-anchor="middle" font-size="9" fill="#8b949e">sensor_readings</text>
+  <text x="397" y="244" text-anchor="middle" font-size="9" fill="#8b949e">ai_alerts</text>
+  <text x="397" y="260" text-anchor="middle" font-size="9" fill="#8b949e">amira_predictions</text>
+  <text x="397" y="278" text-anchor="middle" font-size="9" fill="#8b949e">dispositivo_logs</text>
+
+  <!-- Amira IA Engine -->
+  <rect x="490" y="188" width="145" height="110" rx="8" fill="#161b22" stroke="#f0883e" stroke-width="1.5"/>
+  <text x="562" y="208" text-anchor="middle" font-size="11" font-weight="bold" fill="#f0883e">Amira (Motor IA)</text>
+  <text x="562" y="226" text-anchor="middle" font-size="9" fill="#8b949e">Reglas clínicas</text>
+  <text x="562" y="240" text-anchor="middle" font-size="9" fill="#8b949e">Z-scores · EMA</text>
+  <text x="562" y="254" text-anchor="middle" font-size="9" fill="#8b949e">Índice de confort</text>
+  <text x="562" y="268" text-anchor="middle" font-size="9" fill="#8b949e">Riesgo combinado</text>
+  <text x="562" y="284" text-anchor="middle" font-size="8" fill="#30363d">backend/amira.js</text>
+
+  <!-- FastAPI / Gemini IA -->
+  <rect x="655" y="188" width="140" height="110" rx="8" fill="#161b22" stroke="#a5d6ff" stroke-width="1.5"/>
+  <text x="725" y="208" text-anchor="middle" font-size="11" font-weight="bold" fill="#a5d6ff">FastAPI + Gemini</text>
+  <text x="725" y="224" text-anchor="middle" font-size="9" fill="#8b949e">Diagnóstico texto</text>
+  <text x="725" y="238" text-anchor="middle" font-size="9" fill="#8b949e">Síntesis de voz (gTTS)</text>
+  <text x="725" y="252" text-anchor="middle" font-size="9" fill="#8b949e">Audio WAV → ESP32</text>
+  <text x="725" y="268" text-anchor="middle" font-size="9" fill="#8b949e">Puerto: 3000</text>
+  <text x="725" y="284" text-anchor="middle" font-size="8" fill="#30363d">backend/servidor_ia.py</text>
+
+  <!-- ── CLIENT LAYER ── -->
+  <!-- React Frontend -->
+  <rect x="60" y="318" width="200" height="100" rx="8" fill="#161b22" stroke="#56d364" stroke-width="1.5"/>
+  <text x="160" y="338" text-anchor="middle" font-size="11" font-weight="bold" fill="#56d364">Frontend (React + Vite)</text>
+  <text x="160" y="355" text-anchor="middle" font-size="9" fill="#8b949e">Dashboard en tiempo real</text>
+  <text x="160" y="369" text-anchor="middle" font-size="9" fill="#8b949e">MetricCard · LiveMonitor</text>
+  <text x="160" y="383" text-anchor="middle" font-size="9" fill="#8b949e">Botón "Consultar IA"</text>
+  <text x="160" y="397" text-anchor="middle" font-size="9" fill="#8b949e">Gráfica de telemetría</text>
+  <text x="160" y="410" text-anchor="middle" font-size="8" fill="#30363d">frontend/safecare-neo</text>
+
+  <!-- Mobile (future) -->
+  <rect x="280" y="318" width="140" height="100" rx="8" fill="#161b22" stroke="#56d364" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="350" y="338" text-anchor="middle" font-size="11" font-weight="bold" fill="#56d364">App Móvil</text>
+  <text x="350" y="356" text-anchor="middle" font-size="9" fill="#8b949e">Alertas push</text>
+  <text x="350" y="372" text-anchor="middle" font-size="9" fill="#8b949e">Reporte para padres</text>
+  <text x="350" y="388" text-anchor="middle" font-size="9" fill="#8b949e">(en desarrollo)</text>
+  <text x="350" y="410" text-anchor="middle" font-size="8" fill="#30363d">frontend/safecare-neo/mobile</text>
+
+  <!-- ── BLOCKCHAIN LAYER ── -->
+  <rect x="60" y="435" width="280" height="46" rx="8" fill="#161b22" stroke="#ffd700" stroke-width="1.5"/>
+  <text x="200" y="455" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffd700">Solana Blockchain</text>
+  <text x="200" y="472" text-anchor="middle" font-size="9" fill="#8b949e">Registro inmutable de alertas warning / critical · @solana/web3.js</text>
+
+  <!-- ═══════════════ ARROWS ═══════════════ -->
+  <!-- ESP32 BME280 → Backend -->
+  <line x1="137" y1="166" x2="137" y2="188" stroke="#ff7b72" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <text x="142" y="180" font-size="8" fill="#ff7b72">POST</text>
+
+  <!-- M5GO → Backend -->
+  <line x1="322" y1="166" x2="250" y2="188" stroke="#79c0ff" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <text x="280" y="180" font-size="8" fill="#79c0ff">GET</text>
+
+  <!-- Backend ↔ MongoDB -->
+  <line x1="300" y1="243" x2="325" y2="243" stroke="#ffa657" stroke-width="1.5" marker-end="url(#arrowOrange)"/>
+
+  <!-- Backend → Amira -->
+  <line x1="300" y1="260" x2="490" y2="260" stroke="#f0883e" stroke-width="1.5" marker-end="url(#arrowF0)"/>
+
+  <!-- Backend → FastAPI -->
+  <line x1="300" y1="230" x2="655" y2="230" stroke="#a5d6ff" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowA5)"/>
+
+  <!-- Amira → Solana -->
+  <line x1="562" y1="298" x2="300" y2="435" stroke="#ffd700" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrowGold)"/>
+
+  <!-- Backend → Frontend -->
+  <line x1="180" y1="298" x2="160" y2="318" stroke="#56d364" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+  <!-- M5GO ↔ FastAPI (audio) -->
+  <line x1="400" y1="100" x2="690" y2="188" stroke="#a5d6ff" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="560" y="140" font-size="8" fill="#a5d6ff">Audio WAV</text>
+
+  <!-- Arrow marker definitions -->
+  <defs>
+    <marker id="arrowRed"    markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#ff7b72"/></marker>
+    <marker id="arrowBlue"   markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#79c0ff"/></marker>
+    <marker id="arrowOrange" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#ffa657"/></marker>
+    <marker id="arrowF0"     markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#f0883e"/></marker>
+    <marker id="arrowA5"     markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#a5d6ff"/></marker>
+    <marker id="arrowGold"   markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#ffd700"/></marker>
+    <marker id="arrowGreen"  markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#56d364"/></marker>
+  </defs>
+
+</svg>

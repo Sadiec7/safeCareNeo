@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 580" width="820" height="580" font-family="monospace, sans-serif">
+
+  <!-- Background -->
+  <rect width="820" height="580" fill="#1a1a2e"/>
+
+  <!-- Title -->
+  <text x="410" y="36" text-anchor="middle" font-size="18" font-weight="bold" fill="#e0e0e0">Esquemático — M5GO (ESP32 Receptor de Datos)</text>
+  <text x="410" y="56" text-anchor="middle" font-size="12" fill="#888">safeCareNeo · Nodo Visualizador y Asistente de Voz</text>
+
+  <!-- ═══════════════ M5GO DEVICE BODY ═══════════════ -->
+  <rect x="270" y="75" width="280" height="400" rx="14" fill="#16213e" stroke="#4fc3f7" stroke-width="2.5"/>
+  <!-- Screen bezel -->
+  <rect x="283" y="90" width="254" height="170" rx="6" fill="#0a0a1a" stroke="#37474f" stroke-width="1.5"/>
+  <!-- IPS Display 320x240 -->
+  <rect x="289" y="96" width="242" height="158" rx="4" fill="#001133"/>
+  <text x="410" y="138" text-anchor="middle" font-size="13" font-weight="bold" fill="#4fc3f7">M5GO / M5Stack Core</text>
+  <text x="410" y="156" text-anchor="middle" font-size="10" fill="#90caf9">ESP32-D0WDQ6 · Dual Core 240 MHz</text>
+  <text x="410" y="172" text-anchor="middle" font-size="9" fill="#546e7a">Pantalla IPS 2" · 320×240 px</text>
+  <text x="410" y="188" text-anchor="middle" font-size="9" fill="#546e7a">Speaker · Batería 110 mAh</text>
+  <text x="410" y="205" text-anchor="middle" font-size="9" fill="#546e7a">WiFi 802.11 b/g/n · Bluetooth 4.2</text>
+  <text x="410" y="222" text-anchor="middle" font-size="9" fill="#546e7a">Flash 4MB · PSRAM 520 KB</text>
+  <text x="410" y="242" text-anchor="middle" font-size="9" fill="#263238">─────────────────────────</text>
+
+  <!-- Buttons -->
+  <rect x="289" y="278" width="60" height="24" rx="6" fill="#1a237e" stroke="#7986cb" stroke-width="1.5"/>
+  <text x="319" y="294" text-anchor="middle" font-size="10" fill="#7986cb">BTN A</text>
+
+  <rect x="381" y="278" width="60" height="24" rx="6" fill="#1a3a1a" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="411" y="294" text-anchor="middle" font-size="10" fill="#66bb6a">BTN B</text>
+
+  <rect x="471" y="278" width="60" height="24" rx="6" fill="#3a1a1a" stroke="#ef5350" stroke-width="1.5"/>
+  <text x="501" y="294" text-anchor="middle" font-size="10" fill="#ef5350">BTN C</text>
+
+  <!-- Speaker grill -->
+  <text x="410" y="336" text-anchor="middle" font-size="9" fill="#444">▪ ▪ ▪ ▪ ▪ ▪ ▪ ▪ ▪ ▪  Speaker</text>
+
+  <!-- USB-C port -->
+  <rect x="375" y="460" width="70" height="10" rx="5" fill="#37474f" stroke="#546e7a" stroke-width="1"/>
+  <text x="410" y="458" text-anchor="middle" font-size="8" fill="#90a4ae">USB-C (Flash / Power)</text>
+
+  <!-- M-BUS / Grove port hint -->
+  <text x="410" y="360" text-anchor="middle" font-size="9" fill="#546e7a">M-BUS / Grove Port</text>
+  <rect x="380" y="364" width="60" height="12" rx="3" fill="#0d1b2a" stroke="#37474f" stroke-width="1"/>
+  <text x="410" y="374" text-anchor="middle" font-size="8" fill="#78909c">5V · GND · SCL · SDA</text>
+
+  <!-- Battery indicator -->
+  <rect x="500" y="130" width="30" height="14" rx="3" fill="#2d4a22" stroke="#66bb6a" stroke-width="1"/>
+  <rect x="530" y="134" width="4" height="6" rx="1" fill="#66bb6a"/>
+  <text x="516" y="143" text-anchor="middle" font-size="7" fill="#66bb6a">BAT</text>
+
+  <!-- WiFi antenna symbol (top right corner of device) -->
+  <text x="530" y="112" font-size="16" fill="#4fc3f7">📡</text>
+
+  <!-- ═══════════════ POWER SUPPLY ═══════════════ -->
+  <rect x="60" y="130" width="140" height="100" rx="8" fill="#0d1b2a" stroke="#ffd54f" stroke-width="1.5"/>
+  <text x="130" y="150" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffd54f">Alimentación</text>
+  <text x="130" y="168" text-anchor="middle" font-size="10" fill="#ffe0b2">USB-C 5V / 1A</text>
+  <text x="130" y="183" text-anchor="middle" font-size="9" fill="#888">o batería interna</text>
+  <text x="130" y="198" text-anchor="middle" font-size="9" fill="#888">3.7V LiPo 110 mAh</text>
+  <text x="130" y="213" text-anchor="middle" font-size="9" fill="#888">Carga vía USB-C</text>
+  <!-- Arrow to M5GO -->
+  <line x1="200" y1="180" x2="270" y2="430" stroke="#ffd54f" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="230" y="340" text-anchor="middle" font-size="8" fill="#ffd54f" transform="rotate(-60,230,340)">USB-C</text>
+
+  <!-- ═══════════════ BACKEND / CLOUD ═══════════════ -->
+  <rect x="600" y="100" width="190" height="130" rx="8" fill="#0d1b2a" stroke="#26c6da" stroke-width="1.5"/>
+  <text x="695" y="122" text-anchor="middle" font-size="12" font-weight="bold" fill="#26c6da">Backend (Node.js)</text>
+  <text x="695" y="140" text-anchor="middle" font-size="10" fill="#80deea">Express · MongoDB Atlas</text>
+  <text x="695" y="158" text-anchor="middle" font-size="9" fill="#888">GET /api/sensor-data/</text>
+  <text x="695" y="172" text-anchor="middle" font-size="9" fill="#888">    latest/:unidad_id</text>
+  <text x="695" y="190" text-anchor="middle" font-size="9" fill="#888">POST /api/gemini/analyze</text>
+  <text x="695" y="208" text-anchor="middle" font-size="9" fill="#888">Puerto: 8000 / 3000</text>
+
+  <!-- WiFi connection line to backend -->
+  <line x1="550" y1="200" x2="600" y2="165" stroke="#4fc3f7" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="580" y="185" text-anchor="middle" font-size="9" fill="#4fc3f7">WiFi</text>
+  <text x="580" y="196" text-anchor="middle" font-size="8" fill="#546e7a">HTTP/JSON</text>
+
+  <!-- ═══════════════ GEMINI IA ═══════════════ -->
+  <rect x="600" y="260" width="190" height="110" rx="8" fill="#0d1b2a" stroke="#ab47bc" stroke-width="1.5"/>
+  <text x="695" y="280" text-anchor="middle" font-size="12" font-weight="bold" fill="#ab47bc">Google Gemini IA</text>
+  <text x="695" y="298" text-anchor="middle" font-size="10" fill="#ce93d8">Análisis de riesgo</text>
+  <text x="695" y="315" text-anchor="middle" font-size="9" fill="#888">servidor_ia.py (FastAPI)</text>
+  <text x="695" y="330" text-anchor="middle" font-size="9" fill="#888">Diagnóstico en texto</text>
+  <text x="695" y="345" text-anchor="middle" font-size="9" fill="#888">Audio WAV (gTTS)</text>
+  <!-- Arrow from Backend to Gemini -->
+  <line x1="695" y1="230" x2="695" y2="260" stroke="#ab47bc" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ═══════════════ ESP32 SENSOR NODE ═══════════════ -->
+  <rect x="60" y="290" width="140" height="100" rx="8" fill="#0d1b2a" stroke="#ffb74d" stroke-width="1.5"/>
+  <text x="130" y="312" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffb74d">ESP32 + BME280</text>
+  <text x="130" y="330" text-anchor="middle" font-size="9" fill="#ffe0b2">Nodo Sensor</text>
+  <text x="130" y="347" text-anchor="middle" font-size="9" fill="#888">Temp · Hum · Presión</text>
+  <text x="130" y="363" text-anchor="middle" font-size="9" fill="#888">POST /api/sensor-data</text>
+  <text x="130" y="377" text-anchor="middle" font-size="9" fill="#888">cada 5 segundos</text>
+  <!-- Arrow to Backend -->
+  <line x1="200" y1="340" x2="600" y2="165" stroke="#ffb74d" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- ═══════════════ DISPLAY FLOW DETAIL ═══════════════ -->
+  <rect x="60" y="420" width="180" height="110" rx="8" fill="#0d1b2a" stroke="#4fc3f7" stroke-width="1"/>
+  <text x="150" y="440" text-anchor="middle" font-size="10" font-weight="bold" fill="#4fc3f7">Flujo en pantalla M5GO</text>
+  <text x="150" y="456" text-anchor="middle" font-size="9" fill="#90caf9">1. Conectar WiFi</text>
+  <text x="150" y="470" text-anchor="middle" font-size="9" fill="#888">2. Obtener datos del backend</text>
+  <text x="150" y="484" text-anchor="middle" font-size="9" fill="#888">3. Dibujar dashboard</text>
+  <text x="150" y="498" text-anchor="middle" font-size="9" fill="#888">4. [BTN A] → Gemini IA</text>
+  <text x="150" y="512" text-anchor="middle" font-size="9" fill="#888">5. Reproducir audio WAV</text>
+  <!-- Arrow to M5GO -->
+  <line x1="240" y1="475" x2="270" y2="350" stroke="#4fc3f7" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- ═══════════════ BUTTON FUNCTIONS ═══════════════ -->
+  <rect x="600" y="400" width="190" height="110" rx="8" fill="#0d1b2a" stroke="#7986cb" stroke-width="1"/>
+  <text x="695" y="420" text-anchor="middle" font-size="10" font-weight="bold" fill="#7986cb">Funciones de Botones</text>
+  <text x="695" y="438" text-anchor="middle" font-size="9" fill="#7986cb">BTN A → Consultar IA</text>
+  <text x="695" y="452" text-anchor="middle" font-size="9" fill="#888">  Llama a Gemini + reproduce</text>
+  <text x="695" y="466" text-anchor="middle" font-size="9" fill="#888">  audio WAV con animación</text>
+  <text x="695" y="482" text-anchor="middle" font-size="9" fill="#66bb6a">BTN B → Volver al dashboard</text>
+  <text x="695" y="496" text-anchor="middle" font-size="9" fill="#ef5350">BTN C → Volver al dashboard</text>
+  <!-- Arrow to M5GO buttons -->
+  <line x1="600" y1="450" x2="550" y2="290" stroke="#7986cb" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- ═══════════════ LEGEND ═══════════════ -->
+  <rect x="60" y="545" width="700" height="24" rx="6" fill="#0d1b2a" stroke="#444" stroke-width="1"/>
+  <text x="80" y="561" font-size="9" fill="#4fc3f7">── WiFi HTTP</text>
+  <text x="180" y="561" font-size="9" fill="#ffd54f">╌╌ USB-C Power</text>
+  <text x="300" y="561" font-size="9" fill="#ffb74d">╌╌ Datos sensor → backend</text>
+  <text x="460" y="561" font-size="9" fill="#ab47bc">── IA Gemini/TTS</text>
+  <text x="580" y="561" font-size="9" fill="#888">Firmware: PlatformIO · M5Unified · ArduinoJson</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#ab47bc"/>
+    </marker>
+  </defs>
+
+</svg>
