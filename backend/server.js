@@ -1,13 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-<<<<<<< HEAD
 const SensorValidator = require('./validators');
 const SensorMonitor = require('./sensorMonitor');
 const AmiraPredictor = require('./amira');
-=======
-const { connectToDatabase, getDb } = require('./db');
-const { generarNotaMedicaEstructurada } = require('./geminiService'); // Importamos IA
->>>>>>> dockcomp
 
 const app = express();
 app.use(cors());
@@ -15,7 +10,6 @@ app.use(express.json());
 
 // --- LÓGICA DE NEGOCIO (Helpers) ---
 
-<<<<<<< HEAD
 // MongoDB Client
 const client = new MongoClient(config.MONGODB_URI);
 let db;
@@ -191,20 +185,6 @@ app.post('/api/sensor-data', async (req, res) => {
     });
   }
 });
-=======
-function evaluarAlarmas(data) {
-    const alertas = [];
-    // Las alertas ahora incluyen un nivel de severidad para la UI
-    if (data.temp > 38) alertas.push({ nivel: "critico", msj: "Fiebre detectada" });
-    if (data.temp < 36) alertas.push({ nivel: "critico", msj: "Posible hipotermia" });
-    if (data.hum < 30 || data.hum > 70) alertas.push({ nivel: "advertencia", msj: "Humedad fuera de rango" });
-    
-    return {
-        hayAlerta: alertas.length > 0,
-        detalles: alertas
-    };
-}
->>>>>>> dockcomp
 
 // --- ENDPOINTS ---
 
@@ -291,7 +271,6 @@ app.get('/api/status/:pacienteId', async (req, res) => {
     res.json({ telemetria: status, ultimo_reporte: ultimoReporte });
 });
 
-<<<<<<< HEAD
 // ESTADO DE TODOS LOS SENSORES
 app.get('/api/sensors/status', async (req, res) => {
   try {
@@ -576,10 +555,4 @@ process.on('SIGTERM', async () => {
   }
   await client.close();
   process.exit(0);
-=======
-// --- INICIO DEL SERVIDOR ---
-const PORT = process.env.PORT || 8000;
-connectToDatabase().then(() => {
-    app.listen(PORT, () => console.log(`SafeCareNeo Backend en puerto ${PORT}`));
->>>>>>> dockcomp
 });
