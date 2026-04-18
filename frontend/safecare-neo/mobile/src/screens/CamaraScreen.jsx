@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import Header from "../components/Header";
 
 // El ESP32-CAM expone un stream MJPEG en esta ruta
-// Cambia la IP por la de tu ESP32 en la red local
+// Cambia la IP por la de vultr o tu servidor local
 const STREAM_URL = "http://192.168.1.100/stream";
 
 export default function CamaraScreen() {
