@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 services:
   # Backend: API REST (Node.js - Express)
   # Maneja la conexión a Atlas, Gemini y recibe datos de la ESP32
@@ -39,3 +40,46 @@ services:
 networks:
   safeCareNeo_network:
     driver: bridge
+=======
+services:
+  # Backend: API REST (Node.js - Express)
+  # Maneja la conexión a Atlas, Gemini y recibe datos de la ESP32
+  backend:
+    build: ./backend
+    container_name: safeCareNeo_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env  
+    networks:
+      - safeCareNeo_network
+
+  # IA Engine: Procesamiento de Video (YOLOv8)
+  ai_engine:
+    build: ./ai_engine
+    container_name: safeCareNeo_ai
+    restart: always
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=http://backend:8000/api/alerts # Ajustado a tu ruta de Node
+    networks:
+      - safeCareNeo_network
+
+  # Frontend: Dashboard Médico (React Web)
+  web_dashboard:
+    build: ./web_dashboard
+    container_name: safeCareNeo_web
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - safeCareNeo_network
+
+networks:
+  safeCareNeo_network:
+    driver: bridge
+>>>>>>> dockcomp

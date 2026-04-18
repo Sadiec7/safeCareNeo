@@ -1,24 +1,21 @@
-require('dotenv').config();
 const express = require('express');
-const { MongoClient } = require('mongodb');
 const cors = require('cors');
+<<<<<<< HEAD
 const SensorValidator = require('./validators');
 const SensorMonitor = require('./sensorMonitor');
 const AmiraPredictor = require('./amira');
+=======
+const { connectToDatabase, getDb } = require('./db');
+const { generarNotaMedicaEstructurada } = require('./geminiService'); // Importamos IA
+>>>>>>> dockcomp
 
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// Configuración desde .env
-const config = {
-  MONGODB_URI: process.env.MONGODB_URI,
-  PORT: process.env.PORT || 8000,
-  MIN_CONFIDENCE_TO_SAVE: parseInt(process.env.MIN_CONFIDENCE_TO_SAVE || 50),
-  // Pasar toda la config al validator
-  ...process.env
-};
+// --- LÓGICA DE NEGOCIO (Helpers) ---
 
+<<<<<<< HEAD
 // MongoDB Client
 const client = new MongoClient(config.MONGODB_URI);
 let db;
@@ -194,214 +191,107 @@ app.post('/api/sensor-data', async (req, res) => {
     });
   }
 });
+=======
+function evaluarAlarmas(data) {
+    const alertas = [];
+    // Las alertas ahora incluyen un nivel de severidad para la UI
+    if (data.temp > 38) alertas.push({ nivel: "critico", msj: "Fiebre detectada" });
+    if (data.temp < 36) alertas.push({ nivel: "critico", msj: "Posible hipotermia" });
+    if (data.hum < 30 || data.hum > 70) alertas.push({ nivel: "advertencia", msj: "Humedad fuera de rango" });
+    
+    return {
+        hayAlerta: alertas.length > 0,
+        detalles: alertas
+    };
+}
+>>>>>>> dockcomp
 
-//  OBTENER ÚLTIMA LECTURA
-app.get('/api/sensor-data/latest/:unidad_id', async (req, res) => {
-  try {
-    const { unidad_id } = req.params;
-    
-    const reading = await db.collection('sensor_readings')
-      .findOne(
-        { 
-          unidad_id,
-          "data_quality.is_valid": true 
-        },
-        { sort: { timestamp: -1 } }
-      );
-    
-    if (!reading) {
-      return res.status(404).json({ 
-        error: 'No hay datos válidos para este dispositivo' 
-      });
+// --- ENDPOINTS ---
+
+// 1. Telemetría Única (IoT -> DB -> Alerta)
+app.post('/api/telemetry', async (req, res) => {
+    try {
+        const db = getDb();
+        const { temp, hum, presion, pacienteId } = req.body;
+
+        const lectura = {
+            pacienteId,
+            temp,
+            hum,
+            presion,
+            timestamp: new Date(),
+            // Agregamos el color de estado para que el Dashboard no tenga que calcularlo
+            status_color: (temp > 38 || temp < 36) ? "red" : "green" 
+        };
+
+        await db.collection('dispositivo_logs').insertOne(lectura);
+        
+        const diagnostico = evaluarAlarmas(req.body);
+
+        res.status(201).json({
+            status: "success",
+            data_saved: true,
+            alertas: diagnostico.hayAlerta ? diagnostico.detalles : null
+        });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
     }
-    
-    reading._id = reading._id.toString();
-    res.json(reading);
-    
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
 });
 
-// HISTORIAL DE LECTURAS
-app.get('/api/sensor-data/history/:unidad_id', async (req, res) => {
-  try {
-    const { unidad_id } = req.params;
-    const { hours = 24, limit = 100 } = req.query;
-    
-    const startTimestamp = Math.floor(Date.now() / 1000) - (hours * 3600);
-    
-    const readings = await db.collection('sensor_readings')
-      .find({
-        unidad_id,
-        timestamp: { $gte: startTimestamp },
-        "data_quality.is_valid": true
-      })
-      .sort({ timestamp: -1 })
-      .limit(parseInt(limit))
-      .toArray();
-    
-    res.json({
-      unidad_id,
-      period_hours: hours,
-      count: readings.length,
-      readings: readings.map(r => ({
-        ...r,
-        _id: r._id.toString()
-      }))
-    });
-    
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// 2. Copiloto Médico (IA + Contexto de Sensores)
+app.post('/api/generate-report', async (req, res) => {
+    try {
+        const { dictado, pacienteId } = req.body;
+        const db = getDb();
 
-// ESTADÍSTICAS
-app.get('/api/sensor-data/stats/:unidad_id', async (req, res) => {
-  try {
-    const { unidad_id } = req.params;
-    const { hours = 24 } = req.query;
-    
-    const startTimestamp = Math.floor(Date.now() / 1000) - (hours * 3600);
-    
-    const stats = await db.collection('sensor_readings').aggregate([
-      {
-        $match: {
-          unidad_id,
-          timestamp: { $gte: startTimestamp },
-          "data_quality.is_valid": true
+        // Obtener contexto real de los sensores
+        const ultimaLectura = await db.collection('dispositivo_logs')
+            .find({ pacienteId })
+            .sort({ timestamp: -1 })
+            .limit(1)
+            .toArray();
+
+        if (!ultimaLectura[0]) {
+            return res.status(404).json({ error: "No hay datos previos del sensor" });
         }
-      },
-      {
-        $group: {
-          _id: null,
-          temp_promedio: { $avg: "$datos.temperatura" },
-          temp_min: { $min: "$datos.temperatura" },
-          temp_max: { $max: "$datos.temperatura" },
-          humedad_promedio: { $avg: "$datos.humedad" },
-          humedad_min: { $min: "$datos.humedad" },
-          humedad_max: { $max: "$datos.humedad" },
-          presion_promedio: { $avg: "$datos.presion" },
-          presion_min: { $min: "$datos.presion" },
-          presion_max: { $max: "$datos.presion" },
-          confianza_promedio: { $avg: "$data_quality.confidence" },
-          total_lecturas: { $sum: 1 }
-        }
-      }
-    ]).toArray();
-    
-    if (stats.length === 0) {
-      return res.status(404).json({ 
-        error: 'No hay datos para calcular estadísticas' 
-      });
+
+        // LLAMADA REAL A GEMINI
+        const notaIA = await generarNotaMedicaEstructurada(ultimaLectura[0], dictado);
+
+        const reporteFinal = {
+            pacienteId,
+            fecha: new Date(),
+            sensores_contexto: ultimaLectura[0],
+            dictado_medico: dictado,
+            reporte_estructurado: notaIA // Aquí viene el JSON de Gemini
+        };
+
+        await db.collection('expedientes_clinicos').insertOne(reporteFinal);
+        res.json(reporteFinal);
+    } catch (e) {
+        res.status(500).json({ error: "Error procesando IA: " + e.message });
     }
-    
-    res.json({
-      unidad_id,
-      period_hours: hours,
-      estadisticas: {
-        temperatura: {
-          promedio: parseFloat(stats[0].temp_promedio.toFixed(2)),
-          minima: stats[0].temp_min,
-          maxima: stats[0].temp_max,
-          unidad: "°C"
-        },
-        humedad: {
-          promedio: parseFloat(stats[0].humedad_promedio.toFixed(2)),
-          minima: stats[0].humedad_min,
-          maxima: stats[0].humedad_max,
-          unidad: "%"
-        },
-        presion: {
-          promedio: parseFloat(stats[0].presion_promedio.toFixed(2)),
-          minima: stats[0].presion_min,
-          maxima: stats[0].presion_max,
-          unidad: "hPa"
-        },
-        calidad: {
-          confianza_promedio: parseFloat(stats[0].confianza_promedio.toFixed(2)),
-          total_lecturas: stats[0].total_lecturas
-        }
-      }
-    });
-    
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
 });
 
-// SALUD DEL SENSOR
-app.get('/api/sensor-health/:unidad_id', async (req, res) => {
-  try {
-    const { unidad_id } = req.params;
+// 3. Endpoint para Dashboards (Obtener último estado rápido)
+app.get('/api/status/:pacienteId', async (req, res) => {
+    const db = getDb();
+    const status = await db.collection('dispositivo_logs')
+        .find({ pacienteId: req.params.pacienteId })
+        .sort({ timestamp: -1 })
+        .limit(1)
+        .next();
     
-    // Últimas 50 lecturas
-    const recentReadings = await db.collection('sensor_readings')
-      .find({ unidad_id })
-      .sort({ timestamp: -1 })
-      .limit(50)
-      .toArray();
-    
-    if (recentReadings.length === 0) {
-      return res.status(404).json({ error: 'No hay datos para este dispositivo' });
-    }
-    
-    // Métricas de salud
-    const validReadings = recentReadings.filter(r => r.data_quality?.is_valid);
-    const avgConfidence = validReadings.reduce((sum, r) => 
-      sum + (r.data_quality?.confidence || 0), 0) / validReadings.length;
-    
-    const rejectedCount = recentReadings.length - validReadings.length;
-    const rejectionRate = (rejectedCount / recentReadings.length) * 100;
-    
-    const lastReading = recentReadings[0];
-    const now = Math.floor(Date.now() / 1000);
-    const timeSince = now - lastReading.timestamp;
-    
-    // Determinar estado
-    let healthStatus = 'healthy';
-    let healthIssues = [];
-    
-    if (timeSince > 60) {
-      healthStatus = 'offline';
-      healthIssues.push(`Sin datos por ${timeSince} segundos`);
-    } else if (rejectionRate > 30) {
-      healthStatus = 'critical';
-      healthIssues.push(`${rejectionRate.toFixed(1)}% de lecturas rechazadas`);
-    } else if (avgConfidence < 70) {
-      healthStatus = 'degraded';
-      healthIssues.push('Baja confianza promedio en lecturas');
-    } else if (rejectionRate > 10) {
-      healthStatus = 'warning';
-      healthIssues.push(`${rejectionRate.toFixed(1)}% de lecturas rechazadas`);
-    }
-    
-    res.json({
-      unidad_id,
-      health_status: healthStatus,
-      metrics: {
-        average_confidence: parseFloat(avgConfidence.toFixed(2)),
-        valid_readings: validReadings.length,
-        rejected_readings: rejectedCount,
-        rejection_rate: parseFloat(rejectionRate.toFixed(2)),
-        total_readings_analyzed: recentReadings.length,
-        seconds_since_last_reading: timeSince
-      },
-      issues: healthIssues,
-      last_reading: lastReading.data_quality?.is_valid ? {
-        temperatura: lastReading.datos.temperatura,
-        humedad: lastReading.datos.humedad,
-        presion: lastReading.datos.presion,
-        timestamp: lastReading.timestamp,
-        confidence: lastReading.data_quality.confidence
-      } : null
-    });
-    
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    const ultimoReporte = await db.collection('expedientes_clinicos')
+        .find({ pacienteId: req.params.pacienteId })
+        .sort({ fecha: -1 })
+        .limit(1)
+        .next();
+
+    res.json({ telemetria: status, ultimo_reporte: ultimoReporte });
 });
 
+<<<<<<< HEAD
 // ESTADO DE TODOS LOS SENSORES
 app.get('/api/sensors/status', async (req, res) => {
   try {
@@ -686,4 +576,10 @@ process.on('SIGTERM', async () => {
   }
   await client.close();
   process.exit(0);
+=======
+// --- INICIO DEL SERVIDOR ---
+const PORT = process.env.PORT || 8000;
+connectToDatabase().then(() => {
+    app.listen(PORT, () => console.log(`SafeCareNeo Backend en puerto ${PORT}`));
+>>>>>>> dockcomp
 });
