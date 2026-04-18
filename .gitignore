@@ -17,6 +17,7 @@ Thumbs.db
 .env.test.local
 .env.production.local
 *.pem
+./wallet-keypair.json 
 
 # --- Frontend & Backend (React / Node.js) ---
 node_modules/
