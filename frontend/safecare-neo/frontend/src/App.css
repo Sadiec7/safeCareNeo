@@ -1,111 +1,81 @@
 :root {
-  font-family: Inter, system-ui, sans-serif;
-  background-color: #F4F9FD;
+  font-family: 'Inter', sans-serif;
+  background-color: #f0f4f8;
 }
 
-.screen {
+/* Contenedor principal sin límite de ancho */
+.app-container {
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.header {
-  background: #fff;
-  padding: 1rem;
-  text-align: center;
-  font-weight: bold;
-  border-bottom: 1px solid #d6eaf8;
+/* Layout de Dashboard: Métricas a la izquierda, Gráfica/Cámara a la derecha */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr; /* Columna fija para datos, resto para gráficas */
+  gap: 20px;
+  padding: 20px;
+  flex-grow: 1;
 }
 
-.container {
-  padding: 0 16px 30px;
-  max-width: 500px; /* Para que parezca móvil en PC */
-  margin: 0 auto;
-  width: 100%;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.section-header {
-  background-color: #AED6F1;
-  border-radius: 8px;
-  padding: 8px;
-  margin: 16px 0 12px;
-  text-align: center;
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.section-title {
-  font-size: 15px;
-  font-weight: 500;
-  color: #1A5276;
-  margin: 0;
-}
-
+/* Tarjetas de métricas horizontales */
 .metric-card {
   background: white;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  padding: 20px;
+  border-radius: 12px;
   display: flex;
   justify-content: space-between;
-  border: 1px solid #D6EAF8;
+  align-items: center;
+  border: 1px solid #d6eaf8;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
-.botones-row {
-  display: flex;
-  gap: 12px;
-  margin: 16px 0;
-}
-
-.btn {
-  flex: 1;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #AED6F1;
-  background: white;
-  color: #2980B9;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background-color: #AED6F1;
-  color: #1A5276;
+/* Monitor de ondas estilo pantalla ancha */
+.monitor-container {
+  background: #0f172a; /* Azul muy oscuro/negro */
+  padding: 20px;
+  border-radius: 15px;
+  border: 4px solid #334155;
+  flex-grow: 1;
+  min-height: 300px;
 }
 
 .camara-container {
-  height: 220px;
-  background-color: #1C2833;
+  height: 250px;
+  background: #1e293b;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #7F8C8D;
-  text-align: center;
+  color: #94a3b8;
+  border: 1px solid #334155;
 }
 
-.reporte-card {
-  background: white;
-  border-radius: 10px;
-  border: 1px solid #D6EAF8;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+.section-header {
+  background-color: #aed6f1;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
-.reporte-badge {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: bold;
+.section-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #1a5276;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
-
-.status-dot {
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-left: 8px;
-}
-.online { background-color: #2ecc71; }
-.offline { background-color: #e74c3c; }

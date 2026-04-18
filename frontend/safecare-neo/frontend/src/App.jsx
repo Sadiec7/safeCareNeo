@@ -1,117 +1,88 @@
 import { useState, useEffect } from "react";
-import io from "socket.io-client";
-import axios from "axios";
+import Header from "./components/Header";
+import MetricCard from "./components/MetricCard";
+import LiveMonitor from "./components/LiveMonitor";
+import { getGeminiResponse } from "./services/geminiService";
+// ❌ Se eliminó ElevenLabsService
 import "./App.css";
 
-// Configuración de URLs (Ajusta según tu .env de backend)
-const BACKEND_URL = "http://localhost:5000";
-const socket = io(BACKEND_URL);
-
-const MetricCard = ({ label, valor, unidad }) => (
-  <div className="metric-card">
-    <span className="metric-label">{label}</span>
-    <span className="metric-value">{valor} {unidad}</span>
-  </div>
-);
-
-export default function App() {
-  const [datos, setDatos] = useState({
-    temperatura: 0,
-    humedad: 0,
-    presion: 0,
-    nivel_riesgo: "normal",
+function App() {
+  // Inicializamos valores en 0 a la espera de los sensores reales
+  const [datos, setDatos] = useState({ 
+    temperatura: 0, 
+    humedad: 0, 
+    presion: 0, 
+    nivel_riesgo: "esperando datos..." 
   });
-  const [conectado, setConectado] = useState(false);
 
-  // 1. Cargar datos iniciales desde MongoDB
+  const [isAsistenteCargando, setIsAsistenteCargando] = useState(false);
+  const [historial, setHistorial] = useState(Array(30).fill({ valor: 0 }));
+
+  /* 💡 CONEXIÓN A MONGO (Paso a paso):
+    1. Una vez tengas la URI de MongoDB, crea una API en Express (Node.js).
+    2. En el Backend, usa Mongoose para consultar la colección de sensores.
+    3. Para tiempo real, te recomiendo usar Socket.io.
+    4. Sustituye el useEffect de abajo por una escucha de socket:
+       
+       socket.on("nuevosDatos", (data) => {
+         setDatos(data);
+         setHistorial(prev => [...prev.slice(1), { valor: data.temperatura }]);
+       });
+  */
+
   useEffect(() => {
-    const fetchInicial = async () => {
-      try {
-        const res = await axios.get(`${BACKEND_URL}/api/lecturas`);
-        // Asumiendo que el API devuelve un array y tomamos el último
-        if (res.data.length > 0) {
-          setDatos(res.data[res.data.length - 1]);
-        }
-      } catch (err) {
-        console.error("Error cargando historial:", err);
-      }
-    };
-    fetchInicial();
-  }, []);
+    // Si los datos son 0, la gráfica se mantiene plana
+    const interval = setInterval(() => {
+      setHistorial(prev => {
+        const nuevoDato = { valor: datos.temperatura };
+        return [...prev.slice(1), nuevoDato];
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [datos.temperatura]);
 
-  // 2. Escuchar cambios en tiempo real vía Sockets
-  useEffect(() => {
-    socket.on("connect", () => setConectado(true));
-    socket.on("disconnect", () => setConectado(false));
-
-    // Escuchar el evento que emita tu backend (ej: "nueva-lectura")
-    socket.on("lectura", (nuevaLectura) => {
-      setDatos(nuevaLectura);
-    });
-
-    return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("lectura");
-    };
-  }, []);
-
-  const getNivelStyles = () => {
-    const n = datos.nivel_riesgo;
-    if (n === "critico") return { bg: "#FDEDEC", color: "#922B21", text: "Riesgo crítico" };
-    if (n === "precaucion") return { bg: "#FEFDE7", color: "#7D6608", text: "Precaución" };
-    return { bg: "#EAF9F0", color: "#1E8449", text: "Estado normal" };
+  const handleIA = async () => {
+    setIsAsistenteCargando(true);
+    try {
+      // Ahora solo obtenemos el texto de Gemini sin intentar convertirlo a voz
+      const txt = await getGeminiResponse("Genera un reporte basado en datos actuales.");
+      console.log("Análisis de IA:", txt);
+      alert("Análisis de IA recibido: " + txt); 
+    } catch (e) { 
+      console.error(e); 
+    } finally { 
+      setIsAsistenteCargando(false); 
+    }
   };
 
-  const config = getNivelStyles();
-
   return (
-    <div className="screen">
-      <header className="header">
-        SafeCare NEO 
-        <span className={`status-dot ${conectado ? "online" : "offline"}`}></span>
-      </header>
+    <div className="app-container">
+      <Header />
+      
+      <main className="dashboard-grid">
+        <section className="sidebar">
+          <div className="section-header"><h3>📊 Datos de Sensores (Offline)</h3></div>
+          <MetricCard label="Temperatura" valor={datos.temperatura} unidad="°C" />
+          <MetricCard label="Humedad Amb." valor={datos.humedad} unidad="%" />
+          <MetricCard label="Presión" valor={datos.presion} unidad="hPa" />
+          
+          <button className="btn btn-primary" style={{marginTop: '20px', width: '100%'}} onClick={handleIA}>
+            {isAsistenteCargando ? "Analizando..." : "🤖 Consultar IA"}
+          </button>
+        </section>
 
-      <header></header>
-
-      <div className="container">
-        <div className="section-header">
-          <h2 className="section-title">Estado médico (Real-Time)</h2>
-        </div>
-
-        <div className="metrics-grid">
-          <MetricCard label="Temperatura" valor={datos.temperatura.toFixed(1)} unidad="°C" />
-          <MetricCard label="Humedad" valor={datos.humedad.toFixed(0)} unidad="%" />
-          <MetricCard label="Presión" valor={datos.presion.toFixed(0)} unidad="hPa" />
-        </div>
-
-        <div className="botones-row">
-          <button className="btn">FOTO</button>
-          <button className="btn btn-primary">TIEMPO REAL</button>
-        </div>
-
-        <div className="camara-container">
-          <div className="camara-placeholder">
-            Cámara ESP32-CAM<br />
-            {conectado ? "Conectado al Servidor" : "Buscando servidor..."}
+        <section className="main-content">
+          <div className="section-header"><h3>📡 Monitor de Telemetría</h3></div>
+          <div className="monitor-container">
+            <LiveMonitor title="Datos registrados" data={historial} color="#4ade80" />
           </div>
-        </div>
-
-        <div className="section-header">
-          <h2 className="section-title">Reporte de IA</h2>
-        </div>
-
-        <div className="reporte-card">
-          <div className="reporte-badge" style={{ backgroundColor: config.bg, color: config.color }}>
-            {config.text}
+          <div className="camara-container">
+            <p>🔴 ESP32-CAM: Esperando flujo de video...</p>
           </div>
-          <p className="reporte-desc">
-            {datos.nivel_riesgo === "normal" 
-              ? "Parámetros estables." 
-              : "Atención: Revisar niveles fuera de rango."}
-          </p>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 }
+
+export default App;
